@@ -2,7 +2,7 @@
 # MDP; Markov Decision Process
 ## 1. Markov Property
 - 미래의 State는 과거와 무관하게 현재의 State만으로 결정된다.
-$$P(s_{t+1} \vert s_{t}) = P(s_{t+1} \vert s_{t}, s_{t-1}, \ldots, s_{0})$$
+$$P(s_{t+1} \vert s_{t}) = P(s_{t+1} \vert s_{t}\, s_{t-1}\, \ldots\, s_{0})$$
 ## 2. MP; Markov Process(= Markov Chain)
 - Time Interval이 discrete하고 Markov Property를 나타내는 확률 과정
 ### (1) State Transition Matrix $P$ 
@@ -20,7 +20,7 @@ $$V(s) \overset{\underset{\mathrm{def}}{}}{=} E[G_{t} \vert S_{t}=s]$$
 - MRP에 Action 개념을 추가한 확률 과정
 - 이전에는 State가 Transition Probability에 따라 변했다면, 이제는 Action에 따라 변함.
 ### (1) State Trainsition Matrix P
-$$P_{ss'}^{a} \overset{\underset{\mathrm{def}}{}}{=} P(S_{t+1}=s' \vert S_{t}=s, A_{t}=a)$$
+$$P_{ss'}^{a} \overset{\underset{\mathrm{def}}{}}{=} P(S_{t+1}=s' \vert S_{t}=s\, A_{t}=a)$$
 ### (2) Policy $\pi$
 $$\pi(a \vert s) \overset{\underset{\mathrm{def}}{}}{=} P(A_{t}=a \vert S_{t}=s)$$
 $$P_{ss'}^{\pi} = \sum_{a \in A} \pi(a \vert s) P_{ss'}^a$$
@@ -32,14 +32,14 @@ $$V_{\pi}(s) \overset{\underset{\mathrm{def}}{}}{=} E_{\pi}[G_{t} \vert S_{t}=s]
 $$V_{\pi}(s) = E_{\pi}[R_{t+1} + \gamma V(S_{t+1}) \vert S_{t}=s]$$
 ### (4) State-Action Value Function $Q_{\pi}$
 - The expected return starting from state $s$, taking action $a$, and then following policy $\pi$
-$$Q_{\pi}(s, a) \overset{\underset{\mathrm{def}}{}}{=} E_{\pi}[G_{t} \vert S_{t}=s, A_{t}=a]$$
+$$Q_{\pi}(s\, a) \overset{\underset{\mathrm{def}}{}}{=} E_{\pi}[G_{t} \vert S_{t}=s\, A_{t}=a]$$
 #### Bellman (Expectation) Equation
-$$Q_{\pi}(s, a) = E_{\pi}[R_{t+1} + \gamma Q_{\pi}(S_{t+1}, A_{t+1}) \vert S_{t}=s, A_{t}=a]$$
+$$Q_{\pi}(s\, a) = E_{\pi}[R_{t+1} + \gamma Q_{\pi}(S_{t+1}\, A_{t+1}) \vert S_{t}=s\, A_{t}=a]$$
 ### (5) 관계식
 #### State-Action Value Function to State Value Function
 $$
 \begin{align}
-V_{\pi}(s) &= \sum_{a \in A} \pi(a \vert s) Q_{\pi}(s, a)\\
+V_{\pi}(s) &= \sum_{a \in A} \pi(a \vert s) Q_{\pi}(s\, a)\\
 &= \sum_{a \in A} \pi(a \vert s) \left( R_{s}^{a} + \gamma \sum_{s' \in S} P_{ss'}^{a}V_{\pi}(s') \right)\\
 &= R_{s}^{\pi} + \gamma \sum_{s' \in S} P_{ss'}^{\pi}V_{\pi}(s')
 \end{align}
@@ -47,8 +47,8 @@ $$
 #### State Value Function to State-Action Value Function
 $$
 \begin{align}
-Q_{\pi}(s, a) &= R_{s}^{a} + \gamma \sum_{s' \in S} P_{ss'}^{a}V_{\pi}(s')\\
-&= R_{s}^{a} + \gamma \sum_{s' \in S} P_{ss'}^{a} \sum_{a' \in A} \pi(a' \vert s')Q_{\pi}(s',a')
+Q_{\pi}(s\, a) &= R_{s}^{a} + \gamma \sum_{s' \in S} P_{ss'}^{a}V_{\pi}(s')\\
+&= R_{s}^{a} + \gamma \sum_{s' \in S} P_{ss'}^{a} \sum_{a' \in A} \pi(a' \vert s')Q_{\pi}(s'\,a')
 \end{align}
 $$
 ### (6) Optimal Value Function
@@ -56,23 +56,23 @@ $$
 #### Optimal State Value Function $V^{*}$
 $$V^{*}(s) = \max_{\pi} V_{\pi}(s)$$
 #### Optimal State-Action Value Function $Q^{*}$
-$$Q^{*}(s, a) = \max_{\pi} Q_{\pi}(s, a)$$
+$$Q^{*}(s\, a) = \max_{\pi} Q_{\pi}(s\, a)$$
 ### (7) Optimal Policy Threom
 - 어떤 MDP에서도 다음이 성립한다.
-$$\pi' \ge \pi \leftrightarrow V_{\pi'}(s) \ge V_{\pi}(s), \forall s \in S$$
-$$\pi^{*} \ge \pi, \forall \pi$$
-$$V_{\pi^{*}}(s) = V^{*}(s),\ Q_{\pi^{*}}(s, a) = Q^{*}(s, a)$$
+$$\pi' \ge \pi \leftrightarrow V_{\pi'}(s) \ge V_{\pi}(s)\, \forall s \in S$$
+$$\pi^{*} \ge \pi\, \forall \pi$$
+$$V_{\pi^{*}}(s) = V^{*}(s)\,\ Q_{\pi^{*}}(s\, a) = Q^{*}(s\, a)$$
 - $Q^{*}$를 알고 있다면 Optimal Policy $\pi^{*}$를 다음 방법으로 찾을 수 있다.
 $$
 \pi^{*}(a \vert s)=\left\{
 \begin{array}{c l}	
-    1, & if\ a = \underset{{a \in A}}{\operatorname{argmax}}Q^{*}(s, a)\\
-    0, & otherwise
+    1\, & if\ a = \underset{{a \in A}}{\operatorname{argmax}}Q^{*}(s\, a)\\
+    0\, & otherwise
 \end{array}\right.
 $$
 ### (8) BOE; Bellman Optimality Equation
 - Linear Equation이 아니므로 일반해가 존재하지 않는다.
-$$V^{*}(s) = \sum_{a \in A} \pi^{*}(a \vert s) Q^{*}(s, a) = \max_{a \in A}Q^{*}(s, a)$$
-$$Q^{*}(s, a) = R_{s}^{a} + \gamma \sum_{s' \in S} P_{ss'}^{a}V^{*}(s')$$
+$$V^{*}(s) = \sum_{a \in A} \pi^{*}(a \vert s) Q^{*}(s\, a) = \max_{a \in A}Q^{*}(s\, a)$$
+$$Q^{*}(s\, a) = R_{s}^{a} + \gamma \sum_{s' \in S} P_{ss'}^{a}V^{*}(s')$$
 $$V_{\pi}(s) = \max_{a \in A} \left( R_{s}^{a} + \gamma \sum_{s' \in S} P_{ss'}^{a}V^{*}(s') \right)$$
-$$Q_{\pi}(s, a) = R_{s}^{a} + \gamma \sum_{s' \in S} P_{ss'}^{a}\max_{a' \in A}Q^{*}(s', a')$$
+$$Q_{\pi}(s\, a) = R_{s}^{a} + \gamma \sum_{s' \in S} P_{ss'}^{a}\max_{a' \in A}Q^{*}(s'\, a')$$
